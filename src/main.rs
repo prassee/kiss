@@ -1,6 +1,7 @@
 use std::{
     fs::{File, OpenOptions},
     io::{self, BufRead, Write},
+    path::Path,
     str,
 };
 
@@ -9,6 +10,7 @@ use serde_json::Value;
 const KITTY_PATH: &str = "/tmp/kitty-sesison.kitty";
 
 fn main() {
+    remove_kitty_file();
     let input = io::stdin()
         .lock()
         .lines()
@@ -48,4 +50,11 @@ fn append_to_file(tab_config: String) {
     data_file
         .write(tab_config.as_bytes())
         .expect("write failed");
+}
+
+fn remove_kitty_file() {
+    let file_exists = Path::new(KITTY_PATH).exists();
+    if file_exists {
+        std::fs::remove_file(KITTY_PATH).expect("file cannot be deleted");
+    }
 }
