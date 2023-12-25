@@ -13,7 +13,6 @@ fn main() {
         .lock()
         .lines()
         .fold("".to_string(), |acc, line| acc + &line.unwrap() + "\n");
-
     parse_kitty_session(&input);
 }
 
