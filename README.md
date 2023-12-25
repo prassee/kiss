@@ -26,7 +26,12 @@ kitty @ ls > /tmp/kitty-dump-today.json ; cat /tmp/kitty-dump-today.json > targe
 For convenience I made a fish alias and this can be appended to `fish.config`
 
 ```
-alias skis='kitty @ ls > /tmp/kitty-dump-today.json ; cat /tmp/kitty-dump-today.json > target/release/kiss ; cp /tmp/kitty-sesison.kitty ~/.config/kitty/kitty-session' 
+ function saveKittySession
+   kitty @ ls | ~/.local/bin/kiss
+   cp /tmp/kitty-sesison.kitty ~/.config/kitty/kitty-session.kitty
+ end
+
+alias sks=saveKittySession  
 ```
 
 Re-open kitty and should re-store the tabs.
