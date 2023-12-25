@@ -51,7 +51,9 @@ fn append_to_file(tab_config: String) {
         .write(tab_config.as_bytes())
         .expect("write failed");
 }
-
+/**
+* remove previous version of the file if exist
+* */
 fn remove_kitty_file() {
     let file_exists = Path::new(KITTY_PATH).exists();
     if file_exists {
