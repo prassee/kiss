@@ -2,7 +2,6 @@
 
 A simple utility that I'm using to save kitty session tabs to a file.
 
-
 ### Build
 
 ```
@@ -25,6 +24,15 @@ For convenience I made a fish alias and this can be appended to `fish.config`
  end
 
 alias sks=saveKittySession  
+```
+Now execute 
+```
+source ~/.config/fish/fish.config
+```
+to source the new changes added & followed by 
+or now kitty terminal can be closed.
+```
+sks
 ```
 
 Re-open kitty and should re-store the tabs.
