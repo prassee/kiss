@@ -2,7 +2,13 @@
 name = "kiss"
 version = "0.4.0"
 edition = "2021"
-
+readme = "README.md"
+authors = ["Prasanna Kumar<prassee@prassee.me>"]
+homepage = "https://github.com/prassee/kiss"
+repository = "https://github.com/prassee/kiss"
+keywords = ["cli", "search", "demo"]
+categories = ["command-line-utilities"]
+description = "KISS - KItty Session Saver"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
