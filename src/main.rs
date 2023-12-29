@@ -9,6 +9,9 @@ use serde_json::Value;
 
 const KITTY_PATH: &str = "/tmp/kitty-sesison.kitty";
 
+/**
+Entry point for the application
+*/
 fn main() {
     remove_kitty_file();
     let input = io::stdin()
@@ -18,6 +21,9 @@ fn main() {
     parse_kitty_session(&input);
 }
 
+/**
+parse kitty session for the given `data`
+*/
 fn parse_kitty_session(data: &str) {
     let values: Value = serde_json::from_str(data).unwrap();
     // create a file to stage the chagnes
@@ -34,14 +40,13 @@ fn parse_kitty_session(data: &str) {
         );
         config.push_str(&tab_config);
     });
-    println!("{:?}", config);
+    println!("kitty session written to - {:?}", KITTY_PATH);
     append_to_file(config);
 }
 
-/*
-*
-* append tab config to the created config file
-* */
+/**
+append tab config to the created config file
+*/
 fn append_to_file(tab_config: String) {
     let mut data_file = OpenOptions::new()
         .append(true)
@@ -52,8 +57,8 @@ fn append_to_file(tab_config: String) {
         .expect("write failed");
 }
 /**
-* remove previous version of the file if exist
-* */
+Removes previous version of the file if exist.
+*/
 fn remove_kitty_file() {
     let file_exists = Path::new(KITTY_PATH).exists();
     if file_exists {
