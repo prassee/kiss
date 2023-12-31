@@ -13,6 +13,8 @@ const KITTY_PATH: &str = "/tmp/kitty-sesison.kitty";
 Entry point for the application
 */
 fn main() {
+    println!("welcome to Kitty Session Saver");
+    log();
     remove_kitty_file();
     let input = io::stdin()
         .lock()
@@ -42,6 +44,10 @@ fn parse_kitty_session(data: &str) {
     });
     println!("kitty session written to - {:?}", KITTY_PATH);
     append_to_file(config);
+}
+
+fn log() {
+    println!("{:?}", "logger");
 }
 
 /**
