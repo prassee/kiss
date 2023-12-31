@@ -14,7 +14,6 @@ Entry point for the application
 */
 fn main() {
     println!("welcome to Kitty Session Saver");
-    log();
     remove_kitty_file();
     let input = io::stdin()
         .lock()
@@ -46,10 +45,6 @@ fn parse_kitty_session(data: &str) {
     append_to_file(config);
 }
 
-fn log() {
-    println!("{:?}", "logger");
-}
-
 /**
 append tab config to the created config file
 */
@@ -62,6 +57,7 @@ fn append_to_file(tab_config: String) {
         .write(tab_config.as_bytes())
         .expect("write failed");
 }
+
 /**
 Removes previous version of the file if exist.
 */
