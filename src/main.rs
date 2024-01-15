@@ -1,29 +1,30 @@
 use std::{
     fs::{File, OpenOptions},
-    io::{self, BufRead, Write},
+    io::Write,
     path::Path,
-    str,
+    process::Command,
 };
 
 use serde_json::Value;
 
-const KITTY_PATH: &str = "/tmp/kitty-sesison.kitty";
+const KITTY_PATH: &str = "/tmp/kitty-session.kitty";
 
 /**
 Entry point for the application
 */
 fn main() {
-    println!("welcome to Kitty Session Saver");
+    println!("welcome to KISS(KItty Session Saver)");
+    let cmd = Command::new("kitty")
+        .args(&["@", "ls"])
+        .output()
+        .expect("cannot execute the kitty command");
+    let cmd_output = String::from_utf8_lossy(&cmd.stdout).to_string();
     remove_kitty_file();
-    let input = io::stdin()
-        .lock()
-        .lines()
-        .fold("".to_string(), |acc, line| acc + &line.unwrap() + "\n");
-    parse_kitty_session(&input);
+    parse_kitty_session(cmd_output.as_str());
 }
 
 /**
-parse kitty session for the given `data`
+Parse kitty session for the given `data`
 */
 fn parse_kitty_session(data: &str) {
     let values: Value = serde_json::from_str(data).unwrap();
@@ -46,7 +47,7 @@ fn parse_kitty_session(data: &str) {
 }
 
 /**
-append tab config to the created config file
+Append tab config to the created config file
 */
 fn append_to_file(tab_config: String) {
     let mut data_file = OpenOptions::new()
