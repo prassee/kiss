@@ -1,4 +1,5 @@
 use std::{
+    env::var,
     fs::{File, OpenOptions},
     io::Write,
     path::Path,
@@ -7,13 +8,11 @@ use std::{
 
 use serde_json::Value;
 
-const KITTY_PATH: &str = "/tmp/kitty-session.kitty";
-
 /**
 Entry point for the application
 */
 fn main() {
-    println!("welcome to KISS(KItty Session Saver)");
+    println!("Welcome to KISS(KItty Session Saver)");
     let cmd = Command::new("kitty")
         .args(&["@", "ls"])
         .output()
@@ -29,7 +28,8 @@ Parse kitty session for the given `data`
 fn parse_kitty_session(data: &str) {
     let values: Value = serde_json::from_str(data).unwrap();
     // create a file to stage the chagnes
-    File::create(KITTY_PATH).expect("file not found");
+    let kitty_path = format!("{}/.config/kitty/kitty-session.kitty", var("HOME").unwrap());
+    File::create(&kitty_path).expect("file not found");
     let mut config = String::new();
     values[0]["tabs"].as_array().unwrap().iter().for_each(|tab| {
         let tab_config = format!(
@@ -42,17 +42,17 @@ fn parse_kitty_session(data: &str) {
         );
         config.push_str(&tab_config);
     });
-    println!("kitty session written to - {:?}", KITTY_PATH);
-    append_to_file(config);
+    println!("kitty session written to - {:?}", kitty_path);
+    append_to_file(config, &kitty_path);
 }
 
 /**
 Append tab config to the created config file
 */
-fn append_to_file(tab_config: String) {
+fn append_to_file(tab_config: String, kitty_path: &str) {
     let mut data_file = OpenOptions::new()
         .append(true)
-        .open(KITTY_PATH)
+        .open(kitty_path)
         .expect("output file doesnot exist");
     data_file
         .write(tab_config.as_bytes())
@@ -63,8 +63,9 @@ fn append_to_file(tab_config: String) {
 Removes previous version of the file if exist.
 */
 fn remove_kitty_file() {
-    let file_exists = Path::new(KITTY_PATH).exists();
+    let kitty_path = format!("{}/.config/kitty/kitty-session.kitty", var("HOME").unwrap());
+    let file_exists = Path::new(&kitty_path).exists();
     if file_exists {
-        std::fs::remove_file(KITTY_PATH).expect("file cannot be deleted");
+        std::fs::remove_file(kitty_path).expect("file cannot be deleted");
     }
 }
