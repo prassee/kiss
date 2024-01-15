@@ -12,13 +12,12 @@ use serde_json::Value;
 Entry point for the application
 */
 fn main() {
-    println!("Welcome to KISS(KItty Session Saver)");
+    println!("Welcome to KISS (KItty Session Saver)");
     let cmd = Command::new("kitty")
         .args(&["@", "ls"])
         .output()
         .expect("cannot execute the kitty command");
     let cmd_output = String::from_utf8_lossy(&cmd.stdout).to_string();
-    remove_kitty_file();
     parse_kitty_session(cmd_output.as_str());
 }
 
@@ -29,6 +28,7 @@ fn parse_kitty_session(data: &str) {
     let values: Value = serde_json::from_str(data).unwrap();
     // create a file to stage the chagnes
     let kitty_path = format!("{}/.config/kitty/kitty-session.kitty", var("HOME").unwrap());
+    remove_kitty_file(&kitty_path);
     File::create(&kitty_path).expect("file not found");
     let mut config = String::new();
     values[0]["tabs"].as_array().unwrap().iter().for_each(|tab| {
@@ -62,9 +62,8 @@ fn append_to_file(tab_config: String, kitty_path: &str) {
 /**
 Removes previous version of the file if exist.
 */
-fn remove_kitty_file() {
-    let kitty_path = format!("{}/.config/kitty/kitty-session.kitty", var("HOME").unwrap());
-    let file_exists = Path::new(&kitty_path).exists();
+fn remove_kitty_file(kitty_path: &str) {
+    let file_exists = Path::new(kitty_path).exists();
     if file_exists {
         std::fs::remove_file(kitty_path).expect("file cannot be deleted");
     }
