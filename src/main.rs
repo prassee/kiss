@@ -33,12 +33,13 @@ fn parse_kitty_session(data: &str) {
     let mut config = String::new();
     values[0]["tabs"].as_array().unwrap().iter().for_each(|tab| {
         let tab_config = format!(
-            "\nnew_tab {:} \nlayout {:} \ncd {:} \ntitle {:} \nlaunch --env KITTY_WINDOW_ID={:} --env PWD=/home/saipranav \nfocus\n",
+            "\nnew_tab {:} \nlayout {:} \ncd {:} \ntitle {:} \nlaunch --env KITTY_WINDOW_ID={:} --env PWD={:} \nfocus\n",
             tab["title"].as_str().unwrap(), 
             tab["layout"].as_str().unwrap(), 
             tab["windows"][0]["cwd"].as_str().unwrap(), 
             tab["windows"][0]["title"].as_str().unwrap(),
-            tab["windows"][0]["id"].as_number().unwrap().to_string()
+            tab["windows"][0]["id"].as_number().unwrap().to_string(),
+            var("HOME").unwrap().to_string()
         );
         config.push_str(&tab_config);
     });
